@@ -1,0 +1,30 @@
+#!/bin/bash
+
+function to-header-guard {
+	sed -E 's.[/ -]._.g' | sed -E 's/[[:alpha:]]/\U&/g'
+}
+
+MODULE_PATH="$1"
+AUTHOR="${AUTHOR:="$2"}"
+HEADER_GUARD="$(echo "$MODULE_PATH" | to-header-guard)"
+
+gpl3-license "$AUTHOR" | c-comment
+
+printf '\
+#ifndef %s
+#define %s
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * \\file
+ */
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
+
+#endif // %s
+' "$HEADER_GUARD" "$HEADER_GUARD" "$HEADER_GUARD"

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+MODULE_PATH="$1"
+AUTHOR="${AUTHOR:="$2"}"
+
+gpl3-license "$AUTHOR" | c-comment
+
+printf '\
+#include "%s"
+
+int main()
+{
+	assert(false);
+}
+' "$MODULE_PATH"

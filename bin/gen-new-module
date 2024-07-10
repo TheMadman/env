@@ -1,0 +1,25 @@
+#!/bin/bash
+
+function create-if-not-exists {
+	local given_path="$1"
+	mkdir -p "$(dirname "$given_path")"
+	if [ -f "$given_path" ]
+	then
+		echo "$given_path exists, skipping..."
+	else
+		cat > "$given_path"
+	fi
+}
+
+MODULE_PATH="$1"
+PROJECT_ROOT="${PROJECT_ROOT:=$(realpath ..)}"
+PROJECT_NAME="$(basename "$PROJECT_ROOT")"
+
+HEADER_PATH="$PROJECT_ROOT/src/$PROJECT_NAME/$MODULE_PATH.h"
+gen-header-file | create-if-not-exists "$HEADER_PATH"
+
+SOURCE_PATH="$PROJECT_ROOT/src/$MODULE_PATH.c"
+printf '#include "%s"' "$MODULE_PATH" | create-if-not-exists "$SOURCE_PATH"
+
+TEST_PATH="$PROJECT_ROOT/tests/${PROJECT_NAME}_$(echo "$MODULE_PATH" | sed 's/[/ -]/_/g').c"
+gen-test-file | create-if-not-exists "$TEST_PATH"
