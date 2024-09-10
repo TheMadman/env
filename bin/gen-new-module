@@ -11,15 +11,19 @@ function create-if-not-exists {
 	fi
 }
 
+function escape-to-underscore {
+	sed 's/[/ -]/_/g'
+}
+
 MODULE_PATH="$1"
 PROJECT_ROOT="${PROJECT_ROOT:=$(realpath ..)}"
 PROJECT_NAME="$(basename "$PROJECT_ROOT")"
 
 HEADER_PATH="$PROJECT_ROOT/src/$PROJECT_NAME/$MODULE_PATH.h"
-gen-header-file | create-if-not-exists "$HEADER_PATH"
+gen-header-file "$PROJECT_NAME/$MODULE_PATH" | create-if-not-exists "$HEADER_PATH"
 
 SOURCE_PATH="$PROJECT_ROOT/src/$MODULE_PATH.c"
-printf '#include "%s"' "$MODULE_PATH" | create-if-not-exists "$SOURCE_PATH"
+printf '#include "%s/%s.h"' "$PROJECT_NAME" "$MODULE_PATH" | create-if-not-exists "$SOURCE_PATH"
 
-TEST_PATH="$PROJECT_ROOT/tests/${PROJECT_NAME}_$(echo "$MODULE_PATH" | sed 's/[/ -]/_/g').c"
+TEST_PATH="$PROJECT_ROOT/tests/$(echo "$PROJECT_NAME" | escape-to-underscore)_$(echo "$MODULE_PATH" | escape-to-underscore).c"
 gen-test-file | create-if-not-exists "$TEST_PATH"
