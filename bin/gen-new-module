@@ -26,4 +26,4 @@ SOURCE_PATH="$PROJECT_ROOT/src/$MODULE_PATH.c"
 printf '#include "%s/%s.h"' "$PROJECT_NAME" "$MODULE_PATH" | create-if-not-exists "$SOURCE_PATH"
 
 TEST_PATH="$PROJECT_ROOT/tests/$(echo "$PROJECT_NAME" | escape-to-underscore)_$(echo "$MODULE_PATH" | escape-to-underscore).c"
-gen-test-file | create-if-not-exists "$TEST_PATH"
+gen-test-file "$PROJECT_NAME/$MODULE_PATH" | create-if-not-exists "$TEST_PATH"

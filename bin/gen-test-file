@@ -5,8 +5,9 @@ AUTHOR="${AUTHOR:="$2"}"
 
 gpl3-license "$AUTHOR" | c-comment
 
-printf '\
-#include "%s"
+printf '
+#include <assert.h>
+#include "%s.h"
 
 int main()
 {
