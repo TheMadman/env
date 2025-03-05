@@ -10,7 +10,7 @@ HEADER_GUARD="$(echo "$MODULE_PATH" | to-header-guard)"
 
 gpl3-license "$AUTHOR" | c-comment
 
-printf '\
+printf '
 #ifndef %s
 #define %s
 

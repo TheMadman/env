@@ -7,6 +7,7 @@ gpl3-license "$AUTHOR" | c-comment
 
 printf '
 #include <assert.h>
+#include <stdbool.h>
 #include "%s.h"
 
 int main()
